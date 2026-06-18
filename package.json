@@ -1,0 +1,16 @@
+{
+  "name": "@onecount/ui-tokens",
+  "version": "0.1.0",
+  "description": "Canonical OneCount design tokens — shared brand/AI accent + fonts core, plus per-app theme presets (palette, spacing, radius). Pure, zero-dep, framework-free.",
+  "license": "UNLICENSED",
+  "private": false,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": ["dist", "tokens.json", "src"],
+  "scripts": {
+    "build": "tsc && cp tokens.json dist/tokens.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
