@@ -1,31 +1,17 @@
-# @onecount/ui-tokens
+# @onecount/ui-tokens — DEPRECATED
 
-Canonical OneCount design tokens — the design-language twin of `@onecount/contracts`. Pure, framework-free data (zero runtime deps) shipped as a public **git dependency** so all six products (OneCount inventory, Ops, Shield, Trace, Playbook, web hub) draw their palette / type / spacing / radius from **one source** and can't drift.
+**Retired 2026-07-06** per the hospitality-os-2026-07 quick-win ruling (adjudicated delete-by-default: zero consumers across the OneCount family, a broken `dist/` build, and a README/`tokens.json` contradiction that made this package unsafe to trust as a source of truth).
 
-## Model: shared core + per-app theme
+Do not add new consumers. Nothing currently imports this package — each app already carries its own tokens locally.
 
-- **`CORE`** — identical for every product: the brand accent (`#00D68F` Electric Emerald), the AI/intelligence accent (`#7C3AED` Vivid Violet), the font families (Space Grotesk display + Inter body), and the pill radius. Strictly gated — these may never diverge.
-- **`THEMES`** — two presets that capture the genuine, intentional split:
-  - **`sibling`** (Playbook, Ops, Shield, Trace): background `#0B1220`, status hues `#1FA971 / #E0A309 / #E5484D`, `xs:4` spacing, `8/12/16/22` radius.
-  - **`onecount`** (onecount-app + web hub): background `#0A0F1A`, status hues `#00D68F / #FFB020 / #FF4757`, `xs:8` spacing, `6/8/12/16` radius.
-- **`APP_THEMES`** — pins each app to its preset, so values are de-duplicated and drift-gated today and can be converged **value-by-value** later without a big-bang restyle.
+## Canonical source of truth today
 
-Each app keeps its own RN/Next consumption wrapper (its `useTheme`) and imports these raw values:
+Each app's own `constants/theme.ts` (or equivalent) is canonical. Use `one-count-app/lib/theme.ts` as the reference implementation when aligning another app's theme.
 
-```ts
-import { themeForApp } from "@onecount/ui-tokens";
-const { core, theme } = themeForApp("shield");
-// core.accent === "#00D68F"; theme.status.danger === "#E5484D"
-```
+## Revival path
 
-## Install (tokenless, any build env)
+If the family wants a shared token package again, follow doc 10, §2.3 of the hospitality-os-2026-07 engagement (`onecount-site/docs/hospitality-os-2026-07/`) — it preserves Cameron's alternative fix path (repair the build, resolve the tokens.json contradiction, wire real consumers) as the ratified way back in, rather than restarting from scratch.
 
-```
-npm install "github:cameronharris-ux/onecount-ui-tokens#v0.1.0"
-```
+## History
 
-Prebuilt CJS `dist/` is committed (no registry token, no `.npmrc`, no GitHub org required) — the same distribution model proven by `@onecount/contracts`.
-
-## Evolving tokens
-
-Edit `tokens.json` (the single source), `npm run build`, commit the rebuilt `dist/`, tag a new version, and bump the pin in each app. The Playbook drift gate (`scripts/check-ui-tokens.mjs`) enforces that every app's local theme still carries the shared core and matches its pinned preset.
+Git history is preserved in this repo for reference. See prior commits for the original shared-core + per-app-theme model.
