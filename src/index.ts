@@ -1,71 +1,237 @@
 /**
- * @onecount/ui-tokens — canonical OneCount design tokens.
+ * @onecount/ui-tokens - canonical OneCount design tokens.
  *
- * The design-language twin of @onecount/contracts: pure, framework-free data
- * (zero deps) shipped as a public git dependency so all 6 products draw their
- * palette/type/spacing/radius from ONE source and can't drift.
- *
- * SHARED CORE (`core`) is identical for every product — the brand accent, the
- * AI accent, the font families, the pill radius — and is strictly gated.
- *
- * The two `themes` presets capture the genuine, intentional split between the
- * sibling apps (Playbook/Ops/Shield/Trace) and the OneCount-inventory family
- * (onecount-app + web hub): different dark background, status hues, spacing base
- * and radius scale. Each app `pins` to one preset via `appThemes`, so the values
- * are de-duplicated and drift-gated today and can be converged value-by-value
- * later without a big-bang restyle. Each app keeps its own RN/Next consumption
- * wrapper (its `useTheme`) and imports these raw values.
+ * Pure, framework-free data for the OneCount family. Native and web apps keep
+ * local adapters, but those adapters should source primitive values from this
+ * package rather than copying hexes by hand.
  */
 import tokens from "../tokens.json";
 
-export type ThemeName = "sibling" | "onecount";
-export type AppKey = "playbook" | "ops" | "shield" | "trace" | "onecount-app" | "hub";
+export type ThemeName = "onecount" | "ops" | "shield" | "trace";
+export type AppKey =
+  | "onecount"
+  | "onecount-app"
+  | "inventory"
+  | "hub"
+  | "ops"
+  | "playbook"
+  | "shield"
+  | "trace";
+
+export interface BrandTokens {
+  accent: string;
+  accentDark: string;
+  accentSoft: string;
+  accentSoftDark: string;
+  onAccent: string;
+  primaryGlow: string;
+  primaryDeep: string;
+  ai: string;
+  aiGlow: string;
+  aiDeep: string;
+  tealBridge: string;
+  gradient: string[];
+}
+
+export interface FontTokens {
+  display: string;
+  displayBold: string;
+  displayMedium: string;
+  body: string;
+  medium: string;
+  semibold: string;
+  bold: string;
+  mono: string;
+  monoMedium: string;
+  monoBold: string;
+}
+
+export interface TypeStyle {
+  fontSize: number;
+  fontWeight: number;
+  lineHeight: number;
+  fontFamily: string;
+  letterSpacing?: number;
+  textTransform?: "uppercase";
+  fontVariant?: string[];
+}
+
+export interface TypographyTokens extends Record<string, TypeStyle | number> {
+  display: TypeStyle;
+  screenTitle: TypeStyle;
+  h1: TypeStyle;
+  h2: TypeStyle;
+  h3: TypeStyle;
+  body: TypeStyle;
+  bodySmall: TypeStyle;
+  caption: TypeStyle;
+  label: TypeStyle;
+  heroNumber: TypeStyle;
+  MIN_FONT_SIZE: number;
+}
+
+export interface RadiusTokens {
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  pill: number;
+}
+
+export type NumberScale = Record<string, number>;
+
+export interface ElevationToken {
+  color?: string;
+  y?: number;
+  opacity?: number;
+  radius?: number;
+  elevation: number;
+  $comment?: string;
+}
 
 export interface CoreTokens {
   accent: string;
   accentDark: string;
   ai: string;
-  fonts: {
-    display: string;
-    displayBold: string;
-    displayMedium: string;
-    body: string;
-    medium: string;
-    semibold: string;
-    bold: string;
-  };
   radiusPill: number;
+  brand: BrandTokens;
+  fonts: FontTokens;
+  typography: TypographyTokens;
+  spacingRules: {
+    screenGutter: number;
+    cardGap: number;
+    sectionLabelGap: number;
+    baseGrid: number;
+    cardPadding: number;
+    cardPaddingTight: number;
+  };
+  spacingScales: {
+    siblings: NumberScale;
+    onecountCanonical: NumberScale;
+    $comment?: string;
+  };
+  radius: RadiusTokens;
+  elevation: Record<string, ElevationToken>;
+  keyline: { alpha: number; $comment?: string };
+  motion: {
+    micro: { durationMs: [number, number]; easing: string; pressScaleButton: number; pressScaleCard: number };
+    standard: { durationMs: [number, number]; easing: string };
+    springs: { damping: [number, number]; stiffness: [number, number] };
+    dataReveal: { durationMs: [number, number]; easing: string };
+    skeletonShimmer: { durationMs: number; loop: boolean; easing: string };
+    ambient: { durationMs: number; easing: string };
+    exitRatio: [number, number];
+  };
+  componentState: {
+    pressScale: number;
+    pressOpacity: number;
+    disabledOpacity: number;
+  };
+  icons: {
+    sizes: { inline: number; default: number; emphasis: number };
+    strokeWidth: number;
+    $comment?: string;
+  };
+  a11y: {
+    MIN_TAP_TARGET: number;
+    MIN_TAP_TARGET_ANDROID: number;
+    MIN_FONT_SIZE: number;
+    CONTRAST_FLOOR: number;
+    DISABLED_OPACITY: number;
+    focusRing: { color: string; width: number };
+  };
+  haptics: Record<string, "light" | "medium" | "success" | "warning" | "error" | "strong">;
+  identityHues: Record<"onecount" | "ops" | "shield" | "trace", string> & { $comment?: string };
+  siteGrid: Record<string, { minWidth?: number; maxWidth?: number; columns: number; gutter: number; margin: number }>;
 }
 
-export interface StatusHues {
-  success: string;
-  successDark: string;
-  warning: string;
-  warningDark: string;
-  danger: string;
-  dangerDark: string;
-  info: string;
+export interface ThemeColors {
+  background: string;
+  backgroundElevated?: string;
+  surface: string;
+  surface2?: string;
+  surfaceMuted?: string;
+  border: string;
+  borderStrong?: string;
+  text: string;
+  text2?: string;
+  textMuted?: string;
+  muted?: string;
+  textFaint?: string;
+  [token: string]: string | undefined;
+}
+
+export interface ShadowToken {
+  color: string;
+  y: number;
+  opacity?: number;
+  opacityDark?: number;
+  opacityLight?: number;
+  radius: number;
+  elevation: number;
+}
+
+export interface ContrastPair {
+  name: string;
+  foreground: string;
+  background: string;
+  role: "body" | "display" | "decorative" | string;
 }
 
 export interface ThemePreset {
-  background: string;
-  status: StatusHues;
-  spacing: Record<string, number>;
-  radius: Record<string, number>;
+  $apps: string[];
+  $source: string;
+  colors: {
+    light: ThemeColors;
+    dark: ThemeColors;
+  };
+  spacing: NumberScale;
+  radius: RadiusTokens;
+  fontFamily: Record<string, string>;
+  fontSize?: NumberScale;
+  shadows: Record<string, ShadowToken>;
+  contrastPairs: ContrastPair[];
 }
 
-export const CORE: CoreTokens = tokens.core as CoreTokens;
-
-export const THEMES: Record<ThemeName, ThemePreset> = {
-  sibling: tokens.themes.sibling as unknown as ThemePreset,
-  onecount: tokens.themes.onecount as unknown as ThemePreset,
-};
-
-export const APP_THEMES: Record<AppKey, ThemeName> = tokens.appThemes as Record<AppKey, ThemeName>;
-
-/** The resolved theme preset for a given app (shared core + the app's pinned palette). */
-export function themeForApp(app: AppKey): { core: CoreTokens; theme: ThemePreset } {
-  return { core: CORE, theme: THEMES[APP_THEMES[app]] };
+export interface AuditedDivergence {
+  token: string;
+  packageValue: string;
+  sourceValue: string;
+  source: string;
+  note: string;
 }
 
-export const TOKENS_VERSION: string = tokens.version;
+export interface TokenSchema {
+  $comment: string;
+  version: string;
+  core: CoreTokens;
+  themes: Record<ThemeName, ThemePreset>;
+  appThemes: Record<AppKey, ThemeName>;
+  auditedDivergences: AuditedDivergence[];
+}
+
+export const TOKENS = tokens as unknown as TokenSchema;
+export const CORE: CoreTokens = TOKENS.core;
+export const THEMES: Record<ThemeName, ThemePreset> = TOKENS.themes;
+export const APP_THEMES: Record<AppKey, ThemeName> = TOKENS.appThemes;
+export const AUDITED_DIVERGENCES: AuditedDivergence[] = TOKENS.auditedDivergences;
+
+export function themeNameForApp(app: AppKey): ThemeName {
+  const themeName = APP_THEMES[app];
+  if (!themeName) {
+    throw new Error(`Unknown OneCount app key: ${app}`);
+  }
+  return themeName;
+}
+
+/** The resolved theme preset for a given app plus the shared core tokens. */
+export function themeForApp(app: AppKey): { core: CoreTokens; theme: ThemePreset; themeName: ThemeName } {
+  const themeName = themeNameForApp(app);
+  const theme = THEMES[themeName];
+  if (!theme) {
+    throw new Error(`App ${app} maps to missing theme preset: ${themeName}`);
+  }
+  return { core: CORE, theme, themeName };
+}
+
+export const TOKENS_VERSION: string = TOKENS.version;
