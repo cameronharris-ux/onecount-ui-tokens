@@ -124,3 +124,7 @@ The drift checker loads `dist/tokens.json`, compares configured adapter exports 
 - Rebuilt the package as the OneCount family's shared token source, with per-app resolved themes for OneCount, Ops, Shield, and Trace.
 - Added the doc 10 §3.3 / §4 token categories and the drift/contrast check scripts.
 - Recorded the remaining OneCount identity-hue source drift: `onecount-site/lib/ecosystem.ts` still ships `0 214 143` (`#00D68F`) while v0.3.0 keeps D1 brand mint `#00E39A`.
+
+## 0.4.0 — 2026-07-10
+
+Sibling (ops/shield/trace) light-mode `warning`/`danger`/`success` darkened to `#975A05`/`#C81E24`/`#067154` — the old values failed WCAG AA (1.99–3.91:1) as text on their soft backgrounds and surfaces, and chips render label text in these colours. Dark modes unchanged (all pass ≥4.5:1). OneCount theme untouched (its dedicated statusText tokens already pass 7:1+). New contrastPairs entries make the checker enforce these pairs permanently. Long-term model: adopt OneCount-style statusText/fill split family-wide.

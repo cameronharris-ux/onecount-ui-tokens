@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const pkg = require("../dist/src/index.js");
 
-assert.equal(pkg.TOKENS_VERSION, "0.3.0");
+assert.equal(pkg.TOKENS_VERSION, "0.4.0");
 assert.equal(pkg.CORE.accent, "#00E39A");
 assert.equal(pkg.CORE.ai, "#FF2E8A");
 assert.equal(pkg.CORE.brand.accent, "#00E39A");
