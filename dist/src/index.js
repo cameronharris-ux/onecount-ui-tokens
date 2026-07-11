@@ -3,9 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TOKENS_VERSION = exports.AUDITED_DIVERGENCES = exports.APP_THEMES = exports.THEMES = exports.CORE = exports.TOKENS = void 0;
+exports.MOTION = exports.TOKENS_VERSION = exports.AUDITED_DIVERGENCES = exports.APP_THEMES = exports.THEMES = exports.CORE = exports.TOKENS = void 0;
 exports.themeNameForApp = themeNameForApp;
 exports.themeForApp = themeForApp;
+exports.cssEase = cssEase;
+exports.motionCssVars = motionCssVars;
 /**
  * @onecount/ui-tokens - canonical OneCount design tokens.
  *
@@ -36,3 +38,30 @@ function themeForApp(app) {
     return { core: exports.CORE, theme, themeName };
 }
 exports.TOKENS_VERSION = exports.TOKENS.version;
+/** The OneCount Motion System runtime scale (docs: onecount-ui/docs/MOTION.md). */
+exports.MOTION = exports.CORE.motionSpec;
+/** A motion easing as a CSS `cubic-bezier(...)` string (or `linear`). */
+function cssEase(name) {
+    const [x1, y1, x2, y2] = exports.MOTION.easing[name];
+    if (name === "linear") {
+        return "linear";
+    }
+    return `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+}
+/**
+ * The motion scale as CSS custom properties for web surfaces:
+ * --oc-dur-<name>: <ms>ms and --oc-ease-<name>: cubic-bezier(...).
+ * Returned as a plain record so callers can inline it on :root or emit a file.
+ */
+function motionCssVars() {
+    const vars = {};
+    for (const [name, ms] of Object.entries(exports.MOTION.duration)) {
+        vars[`--oc-dur-${name}`] = `${ms}ms`;
+    }
+    const easingNames = ["standard", "enter", "exit", "emphasized", "move", "linear"];
+    for (const name of easingNames) {
+        vars[`--oc-ease-${name}`] = cssEase(name);
+    }
+    vars["--oc-exit-ratio"] = String(exports.MOTION.exitRatio);
+    return vars;
+}

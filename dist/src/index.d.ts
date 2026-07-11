@@ -64,6 +64,61 @@ export interface ElevationToken {
     elevation: number;
     $comment?: string;
 }
+/** cubic-bezier control points [x1, y1, x2, y2]. */
+export type EasingBezier = [number, number, number, number];
+export type MotionEasingName = "standard" | "enter" | "exit" | "emphasized" | "move" | "linear";
+export type MotionDurationName = "instant" | "fast" | "standard" | "nav" | "expand" | "data" | "brand" | "splash";
+export type MotionSpringName = "soft" | "precise" | "press" | "release";
+export interface SpringSpec {
+    damping: number;
+    stiffness: number;
+    mass: number;
+}
+/**
+ * OneCount Motion System v1.0 runtime scale (see onecount-ui/docs/MOTION.md).
+ * Framework-free values: RN maps easing arrays through Easing.bezier, web
+ * through cssEase()/motionCssVars() below.
+ */
+export interface MotionSpecTokens {
+    $comment?: string;
+    duration: Record<MotionDurationName, number>;
+    /** Exits run at this fraction of their paired entrance duration. */
+    exitRatio: number;
+    easing: Record<MotionEasingName, EasingBezier> & {
+        $comment?: string;
+    };
+    spring: Record<MotionSpringName, SpringSpec> & {
+        $comment?: string;
+    };
+    distance: {
+        micro: number;
+        sm: number;
+        md: number;
+        lg: number;
+        xl: number;
+    };
+    scale: {
+        pressButton: number;
+        pressCard: number;
+        enter: number;
+        popover: number;
+        emphasis: number;
+    };
+    opacity: {
+        backdrop: number;
+        dimmed: number;
+    };
+    splashStages: {
+        $comment?: string;
+        environment: [number, number];
+        construction: [number, number];
+        lockIn: [number, number];
+        identity: [number, number];
+        handoff: [number, number];
+        segmentStaggerMs: number;
+        segmentDurationMs: number;
+    };
+}
 export interface CoreTokens {
     accent: string;
     accentDark: string;
@@ -120,7 +175,9 @@ export interface CoreTokens {
             easing: string;
         };
         exitRatio: [number, number];
+        $comment?: string;
     };
+    motionSpec: MotionSpecTokens;
     componentState: {
         pressScale: number;
         pressOpacity: number;
@@ -146,7 +203,9 @@ export interface CoreTokens {
             width: number;
         };
     };
-    haptics: Record<string, "light" | "medium" | "success" | "warning" | "error" | "strong">;
+    haptics: Record<string, "light" | "medium" | "success" | "warning" | "error" | "strong" | "selection"> & {
+        $comment?: string;
+    };
     identityHues: Record<"onecount" | "ops" | "shield" | "trace", string> & {
         $comment?: string;
     };
@@ -230,3 +289,13 @@ export declare function themeForApp(app: AppKey): {
     themeName: ThemeName;
 };
 export declare const TOKENS_VERSION: string;
+/** The OneCount Motion System runtime scale (docs: onecount-ui/docs/MOTION.md). */
+export declare const MOTION: MotionSpecTokens;
+/** A motion easing as a CSS `cubic-bezier(...)` string (or `linear`). */
+export declare function cssEase(name: MotionEasingName): string;
+/**
+ * The motion scale as CSS custom properties for web surfaces:
+ * --oc-dur-<name>: <ms>ms and --oc-ease-<name>: cubic-bezier(...).
+ * Returned as a plain record so callers can inline it on :root or emit a file.
+ */
+export declare function motionCssVars(): Record<string, string>;
