@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
+// fileURLToPath, not URL.pathname — see check-drift.mjs; URL.pathname keeps
+// %20 and crashes when the package lives under a path containing spaces.
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const tokensPath = path.join(repoRoot, "dist", "tokens.json");
 const tokens = JSON.parse(fs.readFileSync(tokensPath, "utf8"));
 const floor = tokens.core?.a11y?.CONTRAST_FLOOR ?? 4.5;

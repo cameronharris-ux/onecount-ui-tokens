@@ -1,8 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
-const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
+// fileURLToPath, not URL.pathname: the raw pathname keeps percent-encoding
+// (%20 etc.), which breaks for any consuming checkout whose path contains
+// spaces (e.g. "OneCount - Pulse") once this script runs from node_modules.
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
 
 function readJson(filePath) {
