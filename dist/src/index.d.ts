@@ -1,5 +1,5 @@
-export type ThemeName = "onecount" | "ops" | "shield" | "trace";
-export type AppKey = "onecount" | "onecount-app" | "inventory" | "hub" | "ops" | "playbook" | "shield" | "trace";
+export type ThemeName = "onecount" | "ops" | "shield" | "trace" | "pulse";
+export type AppKey = "onecount" | "onecount-app" | "inventory" | "hub" | "ops" | "playbook" | "shield" | "trace" | "pulse";
 export interface BrandTokens {
     accent: string;
     accentDark: string;
@@ -206,7 +206,7 @@ export interface CoreTokens {
     haptics: Record<string, "light" | "medium" | "success" | "warning" | "error" | "strong" | "selection"> & {
         $comment?: string;
     };
-    identityHues: Record<"onecount" | "ops" | "shield" | "trace", string> & {
+    identityHues: Record<"onecount" | "ops" | "shield" | "trace" | "pulse", string> & {
         $comment?: string;
     };
     siteGrid: Record<string, {

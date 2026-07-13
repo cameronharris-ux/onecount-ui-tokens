@@ -4,7 +4,17 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const pkg = require("../dist/src/index.js");
 
-assert.equal(pkg.TOKENS_VERSION, "0.5.0");
+assert.equal(pkg.TOKENS_VERSION, "0.6.0");
+assert.equal(pkg.CORE.identityHues.pulse, "#A78BFA");
+
+const pulse = pkg.themeForApp("pulse");
+const ops = pkg.themeForApp("ops");
+assert.equal(pulse.themeName, "pulse");
+assert.equal(pulse.theme.colors.dark.background, "#0A0F1A");
+
+const sharedPreset = ({ $apps: _apps, $source: _source, ...preset }) => preset;
+assert.deepEqual(sharedPreset(pulse.theme), sharedPreset(ops.theme));
+
 assert.equal(pkg.CORE.accent, "#00E39A");
 assert.equal(pkg.CORE.ai, "#FF2E8A");
 assert.equal(pkg.CORE.brand.accent, "#00E39A");
@@ -20,7 +30,7 @@ assert.equal(pkg.themeForApp("trace").theme.colors.dark.warning, "#F0B429");
 assert.equal(pkg.themeForApp("trace").theme.colors.dark.danger, "#FF6369");
 assert.equal(pkg.themeForApp("trace").theme.spacing.xsPlus, 6);
 
-for (const app of ["onecount-app", "ops", "shield", "trace"]) {
+for (const app of ["onecount-app", "ops", "shield", "trace", "pulse"]) {
   const resolved = pkg.themeForApp(app);
   assert.ok(resolved.core.brand.accent, `${app} core accent is missing`);
   assert.ok(resolved.theme.colors.dark.background, `${app} dark background is missing`);
@@ -50,4 +60,4 @@ assert.ok(vars["--oc-ease-emphasized"].startsWith("cubic-bezier(0.19"));
 assert.equal(pkg.CORE.haptics["brand-lock-in"], "light");
 assert.equal(pkg.CORE.haptics["quantity-step"], "selection");
 
-console.log("smoke ok: built dist resolves real token values for onecount-app, ops, shield, and trace");
+console.log("smoke ok: built dist resolves real token values for onecount-app, ops, shield, trace, and pulse");

@@ -1,6 +1,6 @@
 {
   "name": "@onecount/ui-tokens",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Canonical OneCount design tokens - audited per-app theme values, shared schema constants, and zero-dep drift/contrast checks.",
   "license": "UNLICENSED",
   "private": false,

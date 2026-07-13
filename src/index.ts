@@ -7,7 +7,7 @@
  */
 import tokens from "../tokens.json";
 
-export type ThemeName = "onecount" | "ops" | "shield" | "trace";
+export type ThemeName = "onecount" | "ops" | "shield" | "trace" | "pulse";
 export type AppKey =
   | "onecount"
   | "onecount-app"
@@ -16,7 +16,8 @@ export type AppKey =
   | "ops"
   | "playbook"
   | "shield"
-  | "trace";
+  | "trace"
+  | "pulse";
 
 export interface BrandTokens {
   accent: string;
@@ -193,7 +194,7 @@ export interface CoreTokens {
   haptics: Record<string, "light" | "medium" | "success" | "warning" | "error" | "strong" | "selection"> & {
     $comment?: string;
   };
-  identityHues: Record<"onecount" | "ops" | "shield" | "trace", string> & { $comment?: string };
+  identityHues: Record<"onecount" | "ops" | "shield" | "trace" | "pulse", string> & { $comment?: string };
   siteGrid: Record<string, { minWidth?: number; maxWidth?: number; columns: number; gutter: number; margin: number }>;
 }
 

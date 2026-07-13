@@ -17,6 +17,13 @@ function resolvePath(root, dottedPath) {
   return dottedPath.split(".").reduce((value, key) => (value == null ? undefined : value[key]), root);
 }
 
+function expectedTokenValue(tokens, theme, tokenPath) {
+  if (tokenPath.startsWith("core.")) {
+    return resolvePath(tokens, tokenPath);
+  }
+  return resolvePath(theme, tokenPath);
+}
+
 function formatValue(value) {
   return typeof value === "string" ? value : JSON.stringify(value);
 }
@@ -56,7 +63,8 @@ Config shape:
   "allowedHexLiterals": ["#FFFFFF"],
   "checks": [
     { "name": "dark background", "adapter": "darkColors.background", "token": "colors.dark.background" },
-    { "name": "radius sm", "adapter": "radii.sm", "token": "radius.sm" }
+    { "name": "radius sm", "adapter": "radii.sm", "token": "radius.sm" },
+    { "name": "Pulse identity", "adapter": "identity.pulse", "token": "core.identityHues.pulse" }
   ]
 }`;
 }
@@ -71,7 +79,7 @@ function selfCheck() {
     findings.push("dist/tokens.json does not match tokens.json; run npm run build");
   }
 
-  for (const app of ["onecount-app", "ops", "shield", "trace"]) {
+  for (const app of ["onecount-app", "ops", "shield", "trace", "pulse"]) {
     const resolved = pkg.themeForApp(app);
     if (!resolved?.core?.brand?.accent || !resolved?.theme?.colors?.dark?.background) {
       findings.push(`themeForApp(${app}) did not resolve real values`);
@@ -86,7 +94,7 @@ function selfCheck() {
 
   console.log("ui-token drift self-check ok");
   console.log("- dist/tokens.json matches tokens.json");
-  console.log("- built themeForApp resolves onecount-app, ops, shield, and trace");
+  console.log("- built themeForApp resolves onecount-app, ops, shield, trace, and pulse");
 }
 
 function walkFiles(startDir) {
@@ -202,7 +210,7 @@ function runConfig(configPath) {
   const valueFindings = [];
   for (const check of config.checks ?? []) {
     const actual = adapterValue(objects, check.adapter);
-    const expected = resolvePath(theme, check.token);
+    const expected = expectedTokenValue(tokens, theme, check.token);
     if (actual !== expected) {
       valueFindings.push({ ...check, actual, expected });
     }

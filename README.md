@@ -1,6 +1,6 @@
 # @onecount/ui-tokens
 
-OneCount family design tokens, revived as the literal source of truth in v0.3.0.
+OneCount family design tokens, with five family product presets in v0.6.0.
 
 This package is pure data plus zero-dependency Node checks. Apps still keep their own React Native or web theme adapters, but adapter values should come from this package rather than hand-copied hexes.
 
@@ -20,7 +20,7 @@ Use the public git dependency pattern:
 ```json
 {
   "dependencies": {
-    "@onecount/ui-tokens": "github:cameronharris-ux/onecount-ui-tokens#v0.3.0"
+    "@onecount/ui-tokens": "github:cameronharris-ux/onecount-ui-tokens#v0.6.0"
   }
 }
 ```
@@ -47,17 +47,21 @@ Resolved app keys:
 | `ops`, `playbook` | `ops` |
 | `shield` | `shield` |
 | `trace` | `trace` |
+| `pulse` | `pulse` |
 
 ## Values
 
-v0.3.0 models the shipped theme files directly:
+The current schema models the shipped theme files directly:
 
 | Theme | Dark background | Dark surface | Radius | Source |
 |---|---:|---:|---:|---|
 | `onecount` | `#0A0F1A` | `#111827` | `10/14/18/24/999` | `one-count-app/lib/theme.ts` |
 | `ops` | `#0A0F1A` | `#111827` | `10/14/18/24/999` | `OneCount-Playbook/constants/theme.ts` |
+| `pulse` | `#0A0F1A` | `#111827` | `10/14/18/24/999` | `OneCount - Pulse/constants/theme.ts` |
 | `shield` | `#0B1220` | `#141F33` | `8/12/16/22/999` | `OneCount-Shield/constants/theme.ts` |
 | `trace` | `#0B1220` | `#141F33` | `10/14/18/24/999` | `OneCount-Trace/constants/theme.ts` |
+
+Pulse is the fifth OneCount family product. Its preset is shared-value-identical to Ops; only preset metadata differs, while `core.identityHues.pulse` supplies the violet identity hue `#A78BFA`.
 
 Core ratified values:
 
@@ -117,6 +121,13 @@ Config shape:
 The drift checker loads `dist/tokens.json`, compares configured adapter exports to the pinned token theme, and scans source directories for raw hex literals outside the theme adapter file.
 
 ## Changelog
+
+### 0.6.0 - 2026-07-13
+
+- Added Pulse as the fifth OneCount family product with the `pulse` app key and preset.
+- Kept the Pulse preset shared-value-identical to Ops; only `$apps` and `$source` metadata differ.
+- Added the violet Pulse identity hue as `core.identityHues.pulse` (`#A78BFA`).
+- Extended consumer drift checks to resolve shared `core.*` token paths.
 
 ### 0.3.0 - 2026-07-09
 
